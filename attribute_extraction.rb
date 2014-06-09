@@ -76,7 +76,7 @@ class ActivityRecognition
 				# Slide Window size is set to 20, 50% duplicate
 				window_size = 20
 				counter = 0
-				for counter in 0..190
+				while counter <190
 					# 1. Average: Attribute extraction to each slide window
 					results = Acc.where(Person: name).where(Action: action).limit(window_size).offset(counter)
 					counter = counter + window_size/2

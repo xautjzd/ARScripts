@@ -1,31 +1,8 @@
 #!/usr/bin/env ruby
 
-require 'active_record'
-require 'mysql2'
+require_relative 'orm'
 
-ActiveRecord::Base.establish_connection(
-	adapter: 'mysql2',
-	encoding: 'utf8',
-	host: '202.200.119.165',
-	username: 'root',
-	password: 'root',
-	port: 3306,
-	database: 'sensor'
-)
-
-class Acceleration < ActiveRecord::Base
-	self.table_name = 'acceleration'
-end
-
-class Acc < ActiveRecord::Base
-	self.table_name = 'acc'
-end
-
-class Attribute < ActiveRecord::Base
-	self.table_name = "attributes"
-end
-
-class ActivityRecognition
+class AttributeExtraction
 	def initialize
 		@names = []
 		# Get all people participating in data sampling
@@ -43,10 +20,11 @@ class ActivityRecognition
 	end
 
 	def data_preprocessing
-		puts "### Data preprocessing: begin export data to new table ###"
+		puts "--------------------------------------------------------------"
+		puts " Data preprocessing: begin export sample data to new table  "
 
 		@names.each do |name|
-			puts "### #{name} begin exporting! ###"
+			puts "	---#{name} begin exporting! ---"
 
 			@actions.each do |action|
 				# Filter first 50 records and only select next 200 records
@@ -64,13 +42,15 @@ class ActivityRecognition
 					)
 				end
 			end
-			puts "  ### #{name} import success! ###"
+			puts "	--- #{name} export success! ---"
 		end
-		puts "### Data preprocessing success: All data has been imported successfully! ###"
+		puts " Data preprocessing success: All data has been imported successfully!"
+		puts "--------------------------------------------------------------"
 	end
 
 	def attribute_extraction
-		puts "### Begin attribute extracting! ###"
+		puts "--------------------------------------------------------------"
+		puts "--- Begin attribute extracting! ---"
 		@names.each do |name|
 			@actions.each do |action|
 				# Slide Window size is set to 20, 50% duplicate
@@ -130,10 +110,11 @@ class ActivityRecognition
 				end
 			end
 		end
-		puts "### Attribute extracting successfully! ###"
+		puts "--- Attribute extracting successfully! ---"
+		puts "--------------------------------------------------------------"
 	end
 end
 
-ar = ActivityRecognition.new
-ar.data_preprocessing
-ar.attribute_extraction
+ae = AttributeExtraction.new
+ae.data_preprocessing
+ae.attribute_extraction

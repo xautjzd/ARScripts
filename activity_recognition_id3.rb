@@ -53,6 +53,7 @@ inputs.each do |input|
 
 	if decision == test.last
 		counter += 1
+		puts "#{test} match success"
 	end
 end
 

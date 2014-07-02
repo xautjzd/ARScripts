@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require_relative 'orm'
+require_relative 'naive_bayes'
+
+samples = Attribute.take(432)
+inputs = Attribute.last(100)
+
+nbayes = NBayes::Base.new
+
+# Sample data training
+samples.each do |sample|
+	nbayes.train([sample.X_Average, sample.Y_Average, sample.Z_Average, sample.X_Deviation, sample.Y_Deviation, sample.Z_Deviation, sample.XY_Correlation, sample.YZ_Correlation, sample.XZ_Correlation], sample.Action)
+end
+
+# Predicting
+counter = 0
+inputs.each do |input|
+	tokens = [input.X_Average, input.Y_Average, input.Z_Average, input.X_Deviation, input.Y_Deviation, input.Z_Deviation, input.XY_Correlation, input.YZ_Correlation, input.XZ_Correlation]
+	result = nbayes.classify(tokens)
+	puts result
+	if result.max_class == input.Action
+		counter += 1
+	end
+end
+
+print "Naive Bayes algorithm recognition accuracy: ", counter, "%\n"

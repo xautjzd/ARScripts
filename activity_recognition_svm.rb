@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 
 ####################################################
+# Author: xautjzd
+# Date: 2014/7/2
+#
 # 1. Install 'rb-libsvm' gem:
 # 	gem install rb-libsvm
 #
